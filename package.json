@@ -1,0 +1,10 @@
+{
+  "name": "vrm-application-task",
+  "packageManager": "yarn@3.2.0",
+  "scripts": {
+    "frontend": "yarn workspace vrm-application-task-frontend run"
+  },
+  "workspaces": [
+    "frontend"
+  ]
+}

@@ -1,5 +1,5 @@
 {
-  "name": "vrm-application-task",
+  "name": "vrm-application-task-frontend",
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
