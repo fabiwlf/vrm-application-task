@@ -29,17 +29,18 @@ export class VRMLoginLocalStorage implements IVRMLoginStorage {
     switch (loginResponse.message) {
       case TVRMApiLoginMessages.OK:
         if (typeof loginResponse.token !== "string")
-          throw new Error("Invalid token");
+          throw new Error("Ungültiger Token");
         this.token = loginResponse.token;
         this.saveLogin();
         break;
       case TVRMApiLoginMessages.ERRORUSER:
-        throw new Error("Invalid credentials");
+        throw new Error("Nutzer konnte nicht gefunden werden");
         break;
       case TVRMApiLoginMessages.ERRORPASSWORD:
-        throw new Error("Invalid credentials");
+        throw new Error("Passwort falsch");
         break;
     }
+    return this.token;
   }
   async isLoggedIn() {
     if (this.token) {

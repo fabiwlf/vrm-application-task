@@ -1,14 +1,14 @@
 <script lang="ts" setup>
-import AddEditDialog from "@/components/AddEditDialog.vue";
+import ListItemDialog from "@/components/ListItemDialog.vue";
 import type { IVRMListItem } from "../components/ListItem";
 import { ref } from "vue";
 const items = ref<IVRMListItem[]>([]);
 const addEditDialogChild =
-  ref<typeof AddEditDialog extends new () => infer T ? T : never>();
-const dateFormatter = new Intl.DateTimeFormat("de-DE");
+  ref<typeof ListItemDialog extends new () => infer T ? T : never>();
+const dateFormatter = new Intl.DateTimeFormat("de-DE"); //may need a polyfill with dayjs or similar
 </script>
 <template>
-  <AddEditDialog
+  <ListItemDialog
     ref="addEditDialogChild"
     @create-item="
       (item) => {
@@ -21,7 +21,7 @@ const dateFormatter = new Intl.DateTimeFormat("de-DE");
   <table v-if="items.length">
     <thead>
       <tr>
-        <th>Id</th>
+        <th>#</th>
         <th>Titel</th>
         <th>Text</th>
         <th>Datum</th>
@@ -29,8 +29,8 @@ const dateFormatter = new Intl.DateTimeFormat("de-DE");
       </tr>
     </thead>
     <tbody>
-      <tr v-for="item in items">
-        <td>{{ item.id }}</td>
+      <tr v-for="(item, index) in items" v-bind:key="item.id">
+        <td>{{ index }}</td>
         <td>{{ item.title }}</td>
         <td>{{ item.text }}</td>
         <td>{{ dateFormatter.format(new Date(item.date)) }}</td>

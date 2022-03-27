@@ -2,12 +2,12 @@
 import { ref } from "vue";
 import { VRMLogin } from "../router";
 //define properties for login component
-const props = defineProps<{
+defineProps<{
   minlength: number;
   maxlength: number;
 }>();
 const emit = defineEmits<{
-  (e: "onSuccess"): void;
+  (e: "onSuccess", token: string): void;
 }>();
 
 class VRMLoginUI {
@@ -16,17 +16,15 @@ class VRMLoginUI {
   error = "";
   async onSubmit() {
     try {
-      await VRMLogin.login(this.email, this.password);
-      emit("onSuccess");
+      this.error = "";
+      emit("onSuccess", await VRMLogin.login(this.email, this.password));
     } catch (e) {
       if (e instanceof Error) this.error = e.message;
     }
   }
 }
 const login = ref(new VRMLoginUI());
-/* export default VRMLogin; */
 </script>
-
 <template>
   <main>
     <form @submit.prevent="login.onSubmit">
@@ -51,7 +49,7 @@ const login = ref(new VRMLoginUI());
           required
         />
       </label>
-      <span>{{ login.error }}</span>
+      <span v-if="login.error">{{ login.error }}</span>
       <button type="submit">Login</button>
     </form>
   </main>

@@ -1,3 +1,4 @@
+//@ts-ignore
 const Response = self.Response ?? (await import("whatwg-fetch")).Response;
 
 type TMockedFetchResponse<T> = Omit<Response, "json"> & {
@@ -18,7 +19,7 @@ function makeFetchResponse<T>(
   return response;
 }
 type TMockApiRequestHandler = {
-  [key: string]: { request: any; response: any };
+  [key: string]: { request: unknown; response: unknown };
 };
 type PropEventSource<Type extends TMockApiRequestHandler> = {
   post<Key extends string & keyof Type>(
@@ -36,18 +37,21 @@ type PropEventSource<Type extends TMockApiRequestHandler> = {
 export function createMockApp<
   Type extends TMockApiRequestHandler
 >(): PropEventSource<Type> {
-  const routes = new Map<string, Function>();
+  const routes = new Map<string, unknown>();
   const objectWithHandler: PropEventSource<Type> = {
-    post: function (eventName: string, callback: Function) {
+    post: function (
+      eventName: string,
+      callback: ReturnType<typeof routes.get>
+    ) {
       console.log("eventName", eventName, callback);
-      routes.set(eventName, callback);
+      if (callback) routes.set(eventName, callback);
     },
-    call: async function (eventName: string, request: any) {
+    call: async function <TRequest>(eventName: string, request: TRequest) {
       const callback = routes.get(eventName);
-      if (callback) {
+      if (callback && typeof callback === "function") {
         return makeFetchResponse(200, await callback({ request }));
       } else {
-        throw new Error("Not implemented"); //fetch(eventName, request);
+        throw new Error("Not implemented");
       }
     },
   };

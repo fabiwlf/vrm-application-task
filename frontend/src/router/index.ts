@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { VRMLoginLocalStorage } from "../auth";
+import LoginView from "../views/LoginView.vue";
 export const VRMLogin = new VRMLoginLocalStorage();
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -12,9 +13,7 @@ const router = createRouter({
     {
       path: "/details",
       name: "details",
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
+      //lazy load
       component: () => import("../views/DetailsView.vue"),
       meta: {
         requiresAuth: true,
@@ -23,10 +22,7 @@ const router = createRouter({
     {
       path: "/login",
       name: "login",
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import("../views/LoginView.vue"),
+      component: LoginView,
       async beforeEnter(to, from, next) {
         if (await VRMLogin.isLoggedIn()) {
           next({ name: "details" });
@@ -36,9 +32,9 @@ const router = createRouter({
     },
   ],
 });
-router.beforeEach(async (to, from) => {
-  // canUserAccess() returns `true` or `false`
-  if (to.matched.some((record) => record.meta.requiresAuth)) {
+//check user login
+router.beforeEach(async ({ matched }) => {
+  if (matched.some(({ meta }) => meta.requiresAuth)) {
     if (!(await VRMLogin.isLoggedIn())) {
       router.push({ name: "login" });
     }

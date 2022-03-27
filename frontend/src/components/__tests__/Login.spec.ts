@@ -15,7 +15,7 @@ describe("Login", () => {
     wrapper.find("form").trigger("submit");
     await wrapper.vm.$nextTick();
     await new Promise((resolve) => setTimeout(resolve, 100));
-    expect(wrapper.find("form span").text()).toContain("Invalid credentials");
+    expect(wrapper.find("form span").text()).toContain("Passwort falsch");
   });
   it("can login", async () => {
     wrapper.find("form input[type='text']").setValue("test@test.de");
