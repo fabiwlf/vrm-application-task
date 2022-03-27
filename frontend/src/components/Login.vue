@@ -6,6 +6,7 @@ defineProps<{
   minlength: number;
   maxlength: number;
 }>();
+// emit login
 const emit = defineEmits<{
   (e: "onSuccess", token: string): void;
 }>();
@@ -31,12 +32,7 @@ const login = ref(new VRMLoginUI());
       <h1>Login</h1>
       <label>
         Email:
-        <input
-          type="text"
-          v-model="login.email"
-          placeholder="Username"
-          required
-        />
+        <input type="email" v-model="login.email" placeholder="Email" required />
       </label>
       <label>
         Passwort:

@@ -1,5 +1,5 @@
 import { createMockApp } from "./MockApp";
-//for unittest use dynamic imported crypto library, jsdom doesnt have it
+// for unittest use dynamic imported crypto library, jsdom doesn't have it
 const crypto = self.crypto ?? (await import("crypto"));
 export enum TVRMApiLoginMessages {
   OK,
@@ -26,7 +26,9 @@ type TVRMApi = {
     };
   };
 };
+// create mock server
 const mockApp = createMockApp<TVRMApi>();
+// returns a salted sha256 hash
 async function digestMessage(message: string) {
   const msgUint8 = new TextEncoder().encode(message + "SALT"); // encode as (utf-8) Uint8Array
   const hashBuffer = await crypto.subtle.digest("SHA-256", msgUint8); // hash the message
@@ -46,16 +48,20 @@ const activeTokens = localStorage.getItem("_serverTokens"),
   demoTokens = new Map<string, { email: string }>(
     activeTokens ? JSON.parse(activeTokens) : []
   );
-const addToken = (email: string) => {
-  const token = crypto.randomUUID();
-  demoTokens.set(token, { email: email });
-  localStorage.setItem("_serverTokens", JSON.stringify(Array.from(demoTokens)));
-  return token;
-};
+// define login route
 mockApp.post("/api/login", async ({ request }) => {
   const demoUser = demoUsers.get(request.email);
   if (demoUser) {
     if ((await digestMessage(request.password)) === demoUser.passwordHash) {
+      const addToken = (email: string) => {
+        const token = crypto.randomUUID();
+        demoTokens.set(token, { email: email });
+        localStorage.setItem(
+          "_serverTokens",
+          JSON.stringify(Array.from(demoTokens))
+        );
+        return token;
+      };
       const token = addToken(request.email);
       return {
         token: token,
@@ -67,7 +73,8 @@ mockApp.post("/api/login", async ({ request }) => {
   }
   return { message: TVRMApiLoginMessages.ERRORUSER };
 });
-mockApp.post("/api/token", async ({ request }) => {
+// define token check route, can be used to check if token is valid and to get user email for instance
+mockApp.post("/api/token", ({ request }) => {
   const demoToken = demoTokens.get(request.token);
   if (demoToken) {
     return { status: true };

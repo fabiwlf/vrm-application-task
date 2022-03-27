@@ -3,18 +3,24 @@ import ListItemDialog from "@/components/ListItemDialog.vue";
 import type { IVRMListItem } from "../components/ListItem";
 import { ref } from "vue";
 const items = ref<IVRMListItem[]>([]);
-const addEditDialogChild =
+const listItemDialogChild =
   ref<typeof ListItemDialog extends new () => infer T ? T : never>();
-const dateFormatter = new Intl.DateTimeFormat("de-DE"); //may need a polyfill with dayjs or similar
+const dateFormatter = new Intl.DateTimeFormat("de-DE"); //may needs polyfilling with dayjs or similiar on browsers pre < 2020
 </script>
 <template>
   <ListItemDialog
-    ref="addEditDialogChild"
+    ref="listItemDialogChild"
     @create-item="
       (item) => {
+        //could also be done with provide / inject, model update or prop + sync
+        items.push(item); //add new item
+      }
+    "
+    @update-item="
+      (item) => {
+        //separated add / update, because it is also used for create
         const existingItem = items.findIndex((findBy) => findBy.id === item.id);
-        if (existingItem >= 0) items[existingItem] = item;
-        else items.push(item);
+        items[existingItem] = item; //update existing item
       }
     "
   />
@@ -35,7 +41,7 @@ const dateFormatter = new Intl.DateTimeFormat("de-DE"); //may need a polyfill wi
         <td>{{ item.text }}</td>
         <td>{{ dateFormatter.format(new Date(item.date)) }}</td>
         <td class="action-column">
-          <span @click="addEditDialogChild?.editItem(item)">Bearbeiten</span>
+          <span @click="listItemDialogChild?.editItem(item)">Bearbeiten</span>
         </td>
       </tr>
     </tbody>
@@ -87,8 +93,6 @@ table {
       &:not(.spacer) {
         border-radius: 7px;
         overflow: hidden;
-        -webkit-transition: 0.3s all ease;
-        -o-transition: 0.3s all ease;
         transition: 0.3s all ease;
         &:hover {
           -webkit-box-shadow: 0 2px 10px -5px rgba(0, 0, 0, 0.1);
@@ -98,8 +102,6 @@ table {
       th {
         background: #25252b;
         border: none;
-        -webkit-transition: 0.3s all ease;
-        -o-transition: 0.3s all ease;
         transition: 0.3s all ease;
         a {
           color: #b3b3b3;
@@ -116,8 +118,6 @@ table {
       td {
         background: #25252b;
         border: none;
-        -webkit-transition: 0.3s all ease;
-        -o-transition: 0.3s all ease;
         transition: 0.3s all ease;
         a {
           color: #b3b3b3;
@@ -174,13 +174,6 @@ table {
     }
   }
 }
-
-/* table th:not(:last-child) {
-  text-align: left;
-}
-table tr td {
-  word-break: break-all;
-} */
 .action-column {
   text-align: center;
 }

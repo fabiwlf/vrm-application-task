@@ -46,6 +46,10 @@ class VRMListItemFormBase<T, TItem = Omit<T, "id">> {
     for (const key in this.item) this.item[key as keyof TItem].value = "";
     this.id = "";
   }
+
+  validate(): boolean {
+    return Object.keys(this.item).every((v) => this.item[v as keyof TItem].validator?.());
+  }
 }
 export class VRMListItemForm extends VRMListItemFormBase<IVRMListItem> {
   constructor(/* item: TVRMListItemForm<IVRMListItem> */) {

@@ -1,10 +1,10 @@
 import { describe, it, expect } from "vitest";
 
 import { mount } from "@vue/test-utils";
-import AddEditDialog from "../AddEditDialog.vue";
+import ListItemDialog from "../ListItemDialog.vue";
 
-describe("AddEditDialog", () => {
-  const wrapper = mount(AddEditDialog, {
+describe("ListItemDialog", () => {
+  const wrapper = mount(ListItemDialog, {
     props: {},
   });
   it("renders properly", () => {
@@ -15,7 +15,7 @@ describe("AddEditDialog", () => {
     text: "text",
     date: new Date().toISOString().split("T")[0],
   };
-  it("can login", async () => {
+  it("can add items", async () => {
     wrapper.find("form input[type='text']").setValue(item.title);
     wrapper.find("form textarea").setValue(item.text);
     wrapper.find("form input[type='date']").setValue(item.date);
@@ -26,7 +26,7 @@ describe("AddEditDialog", () => {
 
     expect(wrapper.emitted()).toHaveProperty("createItem");
   });
-  it("has correct item", async () => {
+  it("has correct properties", async () => {
     const [emittedArray] = wrapper.emitted().createItem;
     if (
       typeof emittedArray === "object" &&

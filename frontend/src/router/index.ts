@@ -33,10 +33,12 @@ const router = createRouter({
   ],
 });
 //check user login
-router.beforeEach(async ({ matched }) => {
+router.beforeEach(async ({ matched, meta }) => {
   if (matched.some(({ meta }) => meta.requiresAuth)) {
     if (!(await VRMLogin.isLoggedIn())) {
       router.push({ name: "login" });
+    } else {
+      meta.isLoggedIn = true;
     }
   }
 });

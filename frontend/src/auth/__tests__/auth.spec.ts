@@ -1,6 +1,4 @@
 import { describe, it, expect } from "vitest";
-
-import { mount } from "@vue/test-utils";
 import { VRMLoginLocalStorage } from "../index";
 
 describe("Login", () => {
@@ -36,5 +34,9 @@ describe("Login", () => {
   });
   it("is logged in", async () => {
     expect(await VRMLogin.isLoggedIn()).toBe(true);
+  });
+  it("is logged out", async () => {
+    VRMLogin.clearLogin();
+    expect(await VRMLogin.isLoggedIn()).toBe(false);
   });
 });

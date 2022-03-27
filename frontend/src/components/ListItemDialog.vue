@@ -2,18 +2,21 @@
 import { ref } from "vue";
 import type { IVRMListItem } from "./ListItem";
 import { VRMListItemForm } from "./ListItem";
-import TextInput from "./TextInput.vue";
 
 //define properties for login component
 const emit = defineEmits<{
   (e: "createItem", item: IVRMListItem): void;
+  (e: "updateItem", item: IVRMListItem): void;
 }>();
 const listItemForm = ref(new VRMListItemForm()),
   listItem = listItemForm.value.item;
 
 const saveItem = (form: VRMListItemForm) => {
-    emit("createItem", form.get);
-    form.clear();
+    if (form.validate()) {
+      if (form.isEditMode) emit("updateItem", form.get);
+      else emit("createItem", form.get);
+      form.clear();
+    }
   },
   editItem = (item: IVRMListItem) => listItemForm.value.assign(item);
 defineExpose({
@@ -37,7 +40,7 @@ defineExpose({
           placeholder="Titel"
           required
         />
-        <span>{{ listItem.title.validator?.() }}</span></label
+        <!-- <span>{{ listItem.title.validator?.() }}</span> --></label
       >
       <label>
         Text:

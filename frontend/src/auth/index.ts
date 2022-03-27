@@ -3,6 +3,7 @@ type TVRMLoginSessionToken = string;
 interface IVRMLoginStorage {
   saveLogin(): void;
   restoreLogin(): void;
+  clearLogin(): void;
   login: (email: string, password: string) => void;
   isLoggedIn: () => Promise<boolean>;
   token: TVRMLoginSessionToken;
@@ -10,21 +11,31 @@ interface IVRMLoginStorage {
 export class VRMLoginLocalStorage implements IVRMLoginStorage {
   token;
   constructor() {
+    // constructor
     this.token = this.restoreLogin();
   }
   restoreLogin() {
+    // restore token from local storage
     const token = localStorage.getItem("_login");
     const fields: TVRMLoginSessionToken = token ? JSON.parse(token) : "";
     return fields;
   }
   saveLogin() {
+    // save token to local storage
     localStorage.setItem("_login", JSON.stringify(this.token));
   }
+  clearLogin() {
+    // clear token from local storage
+    localStorage.removeItem("_login");
+    this.token = "";
+  }
   async login(email: string, password: string) {
+    // Do api login request (insecure, mock only.)
     const login = await fetchMock("/api/login", {
       email: email,
       password: password,
     });
+    // only json() has typings
     const loginResponse = await login.json();
     switch (loginResponse.message) {
       case TVRMApiLoginMessages.OK:
@@ -44,6 +55,7 @@ export class VRMLoginLocalStorage implements IVRMLoginStorage {
   }
   async isLoggedIn() {
     if (this.token) {
+      // check token on "server", should not be done everytime.. but for now it is.
       const login = await fetchMock("/api/token", {
         token: this.token,
       });
