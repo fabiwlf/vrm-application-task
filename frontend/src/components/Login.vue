@@ -29,10 +29,15 @@ const login = ref(new VRMLoginUI());
 <template>
   <main>
     <form @submit.prevent="login.onSubmit">
-      <h1>Login</h1>
+      <!--   <h1>Login</h1> -->
       <label>
         Email:
-        <input type="email" v-model="login.email" placeholder="Email" required />
+        <input
+          type="email"
+          v-model="login.email"
+          placeholder="Email"
+          required
+        />
       </label>
       <label>
         Passwort:
@@ -51,18 +56,10 @@ const login = ref(new VRMLoginUI());
   </main>
 </template>
 
-<style scoped>
+<style>
 h1 {
   font-weight: 500;
   font-size: 2.6rem;
   top: -10px;
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-  padding: 2rem;
-  width: min(100%, 400px);
-  margin: auto;
 }
 </style>

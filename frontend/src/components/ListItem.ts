@@ -48,7 +48,9 @@ class VRMListItemFormBase<T, TItem = Omit<T, "id">> {
   }
 
   validate(): boolean {
-    return Object.keys(this.item).every((v) => this.item[v as keyof TItem].validator?.());
+    return Object.keys(this.item).every((v) =>
+      this.item[v as keyof TItem].validator?.()
+    );
   }
 }
 export class VRMListItemForm extends VRMListItemFormBase<IVRMListItem> {
@@ -78,7 +80,9 @@ export class VRMListItemForm extends VRMListItemFormBase<IVRMListItem> {
       },
       date: {
         value: "",
-        validator: () => true,
+        validator() {
+          return this.value.length > 0;
+        },
       },
     });
   }

@@ -27,7 +27,7 @@ defineExpose({
 
 <template>
   <main>
-    <form @submit.prevent="saveItem(listItemForm)">
+    <form @submit.prevent="saveItem(listItemForm)" class="list-item-dialog">
       <h1 v-if="listItemForm.isEditMode">Editieren</h1>
       <h1 v-else>Neu</h1>
       <!-- <TextInput v-model="listItem.title" type="text"></TextInput> -->
@@ -64,19 +64,29 @@ defineExpose({
           required
         />
       </label>
-      <button type="submit">Speichern</button>
-      <button
-        type="button"
-        v-show="listItemForm.isEditMode"
-        @click="listItemForm.clear()"
-      >
-        Abbrechen
-      </button>
+      <div class="button-box">
+        <button
+          type="submit"
+          :class="{
+            'opacity-50 pointer-events-none': !listItemForm.validate(),
+          }"
+        >
+          Speichern
+        </button>
+        <button
+          type="button"
+          v-show="listItemForm.isEditMode"
+          @click="listItemForm.clear()"
+          class="!bg-gray-400"
+        >
+          Abbrechen
+        </button>
+      </div>
     </form>
   </main>
 </template>
 
-<style scoped>
+<style lang="scss">
 h1 {
   font-weight: 500;
   font-size: 2.6rem;
