@@ -5,7 +5,8 @@ import { ref } from "vue";
 const items = ref<IVRMListItem[]>([]);
 const listItemDialogChild =
   ref<typeof ListItemDialog extends new () => infer T ? T : never>();
-const dateFormatter = new Intl.DateTimeFormat("de-DE"); //may needs polyfilling with dayjs or similiar on browsers pre < 2020
+//may needs polyfilling with dayjs or similiar on browsers pre < 2020
+const dateFormatter = new Intl.DateTimeFormat("de-DE");
 </script>
 <template>
   <div>

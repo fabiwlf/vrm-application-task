@@ -20,7 +20,7 @@ import Login from "@/components/Login.vue";
           />
 
           <p class="text-xs text-gray-500 mt-3">
-            Literally you probably haven't heard of them jean shorts.
+            
           </p>
         </div>
       </div>
