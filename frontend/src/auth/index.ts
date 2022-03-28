@@ -2,9 +2,9 @@ import { fetchMock, TVRMApiLoginMessages } from "./MockLoginRoute";
 type TVRMLoginSessionToken = string;
 interface IVRMLoginStorage {
   saveLogin(): void;
-  restoreLogin(): void;
+  restoreLogin(): string;
   clearLogin(): void;
-  login: (email: string, password: string) => void;
+  login: (email: string, password: string) => Promise<string>;
   isLoggedIn: () => Promise<boolean>;
   token: TVRMLoginSessionToken;
 }

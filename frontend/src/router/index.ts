@@ -23,6 +23,7 @@ const router = createRouter({
       path: "/login",
       name: "login",
       component: LoginView,
+      //redirect to details view if user is logged in
       async beforeEnter(to, from, next) {
         if (await VRMLogin.isLoggedIn()) {
           next({ name: "details" });

@@ -1,4 +1,4 @@
-import { createMockApp } from "./MockApp";
+import { createMockApp } from "../helpers/MockApp";
 // for unittest use dynamic imported crypto library, jsdom doesn't have it
 const crypto = self.crypto ?? (await import("crypto"));
 export enum TVRMApiLoginMessages {

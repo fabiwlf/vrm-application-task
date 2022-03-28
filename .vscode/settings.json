@@ -6,5 +6,6 @@
   "typescript.tsdk": "node_modules/typescript/lib",
   "scss.lint.unknownAtRules": "ignore",
   "css.lint.unknownAtRules": "ignore",
-  "vue.lint.unknownAtRules": "ignore"
+  "vue.lint.unknownAtRules": "ignore",
+  "vscode-edge-devtools.webhint": false
 }

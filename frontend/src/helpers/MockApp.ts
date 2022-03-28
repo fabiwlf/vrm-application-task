@@ -61,16 +61,3 @@ export function createMockApp<
   };
   return objectWithHandler;
 }
-/* export default async function mockedFetch(
-  input: RequestInfo,
-  init?: RequestInit
-  //or Parameters<typeof fetch>
-) {
-  const fetchResponse = await person.call("/api/login", {
-    email: "xx",
-    password: "",
-  });
-  const mockedFetchF = mockFetch(200, fetchResponse);
-  return mockedFetchF;
-}
- */

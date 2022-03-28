@@ -1,9 +1,3 @@
-export interface IVRMListItem {
-  id?: string;
-  title: string;
-  text: string;
-  date: string;
-}
 type TVRMListItemForm<T> = {
   [K in keyof T]: {
     value: T[K] | string;
@@ -48,10 +42,17 @@ class VRMListItemFormBase<T, TItem = Omit<T, "id">> {
   }
 
   validate(): boolean {
-    return Object.keys(this.item).every((v) =>
-      this.item[v as keyof TItem].validator?.()
+    return Object.keys(this.item).every((key) =>
+      this.item[key as keyof TItem].validator?.()
     );
   }
+}
+
+export interface IVRMListItem {
+  id?: string;
+  title: string;
+  text: string;
+  date: string;
 }
 export class VRMListItemForm extends VRMListItemFormBase<IVRMListItem> {
   constructor(/* item: TVRMListItemForm<IVRMListItem> */) {
